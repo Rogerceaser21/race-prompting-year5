@@ -852,6 +852,20 @@ html, body {
   z-index: 9999;
 }
 </style>
+<script>
+/* === NO-LOCALSTORAGE POLICY (added 2026-06-10) ===
+   This deck must never persist anything to browser storage. Stale state silently
+   restored over a restructured deck once broke a live lesson. On load we purge any
+   existing keys, then make reads return null and writes no-ops so all legacy storage
+   code becomes harmless. Edits persist only via the Cmd+S export (baked into the file). */
+(function () {
+  try { localStorage.clear(); } catch (e) {}
+  try {
+    Storage.prototype.getItem = function () { return null; };
+    Storage.prototype.setItem = function () {};
+  } catch (e) {}
+})();
+</script>
 </head>
 <body>
 
